@@ -4,11 +4,12 @@ require "color"
 
 class Project
 
-  attr_accessor :name, :icon_color
+  attr_accessor :name, :icon_color, :package
   attr_reader :services
 
-  def initialize name
+  def initialize package, name
     @name = name
+    @package = package
     @services = []
     @icon_color = Color::GREEN
   end
@@ -25,7 +26,8 @@ class Project
     JSON.pretty_generate({
       "name" => @name,
       "services" => @services,
-      "icon_color" => @icon_color
+      "icon_color" => @icon_color,
+      "package" => @package
     })
   end
 end

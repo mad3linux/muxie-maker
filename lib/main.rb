@@ -24,7 +24,7 @@ if __FILE__ == $0
     
     case command
     when "init"
-      cli.init ARGV[1]
+      cli.init ARGV[1], ARGV[2]
     when "service"
       cli.add_service
     when "color"
