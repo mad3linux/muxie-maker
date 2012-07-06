@@ -1,5 +1,7 @@
 require "open-uri"
 require "rexml/document"
+require 'open3'
+require "fileutils"
 
 class MuxieMaker
 
@@ -8,11 +10,13 @@ class MuxieMaker
   EMPTY_DIR = 2 # ./ and ../ are listed in #Dir.entries
   MUXIE_JSON = "muxie.json"
   MUXIE_DIR = "mad3-muxie"
+  MUXIE_KEYSTORE = "muxie.keystore"
 
   def initialize
     @project_dir = Dir.pwd
     @android = `which android`.chop
     @adb = `which adb`.chop
+    @keytool = `which keytool`.chop
     @manifest = "#{@project_dir}/#{MUXIE_DIR}/AndroidManifest.xml"
     @strings = "#{@project_dir}/#{MUXIE_DIR}/res/values/strings.xml"
     @sql = "#{@project_dir}/#{MUXIE_DIR}/res/values/sql.xml"
@@ -49,7 +53,22 @@ class MuxieMaker
   end
 
   def project_dir?
-    File.exists? "#{@project_dir}/#{MUXIE_JSON}"
+    unless File.exists? "#{@project_dir}/#{MUXIE_JSON}"
+      error _("The %s does not contains the %s file.\n" +
+        "Try to execute 'muxie-maker init'") % [@project_dir, MUXIE_JSON]
+      return false
+    end
+    return true
+  end
+
+  def has_muxie_dir?
+    unless File.directory? "#{@project_dir}/#{MUXIE_DIR}"
+      error _("Project diretory %s not found.\n" +
+          "You need to download the project from " +
+          "https://github.com/mad3linux/mad3-muxie/tags") % "#{@project_dir}/#{MUXIE_DIR}"
+      return false
+    end
+    return true
   end
 
   def update_package package
@@ -122,6 +141,79 @@ class MuxieMaker
     File.delete "#{@sql}~"
   end
 
+  def adb_install app, mode="debug"
+    info _("installing the apk in the emulator...")
+    # update project files
+    cmd = "#{@adb} install -r -l #{@project_dir}/#{MUXIE_DIR}/bin/#{app}-#{mode}.apk"
+
+    out = ""
+    # capture the stderr from the terminal
+    Open3.popen3(cmd) do |stdrin, stdout, stderr|
+      out = stderr.read
+    end
+
+    if out.chop == "error: device not found"
+      hint _("please start an AVD or create one if you don't have yet.")
+      `#{@android} avd`
+    end
+  end
+
+  def adb_uninstall package
+    info _("uninstalling the app...")
+    `#{@adb} uninstall #{package}`
+  end
+
+  def android_update_project app
+    info _("updating project settings...")
+    # update project
+    `#{@android} update project --target 1 --name #{app} --path #{@project_dir}/#{MUXIE_DIR}`
+  end
+
+  def ant_debug
+    # execute ant
+    info _("generating apk file...")
+    `cd #{@project_dir}/#{MUXIE_DIR} && ant debug -d -v`
+  end
+
+  def ant_release
+    # execute ant
+    info _("generating apk file...")
+
+    if File.exists? "#{@project_dir}/#{MUXIE_DIR}/ant.properties"
+      # TODO: tentar mostrar as mensagens do ant que pedem esses dados.
+      hint _("enter keystore password and enter password for alias:")
+    end
+
+    `cd #{@project_dir}/#{MUXIE_DIR} && ant release -d -v`
+  end
+
+  def ant_clean
+    info _("cleaning %s...") % "#{@project_dir}/#{MUXIE_DIR}"
+    `cd #{@project_dir}/#{MUXIE_DIR} && ant clean`
+  end
+
+  def export_apk
+    # FIXME: ...
+    # verificar arquivos apk em bin/
+    begin
+      info _("copying apk files to #{@project_dir}/#{MUXIE_DIR}")
+      entries = Dir.entries "#{@project_dir}/#{MUXIE_DIR}/bin/"
+      entries.each do |apk|
+        if apk =~ /.+(-debug|-release|-release-unsigned)(\.apk)$/
+          FileUtils.cp "#{@project_dir}/#{MUXIE_DIR}/bin/#{apk}", "#{@project_dir}"
+        end
+      end
+    rescue SystemCallError => ex
+      error _("directory %s not found. Try 'muxie-maker test' or " +
+        "'muxie-maker release' first.") % "#{@project_dir}/#{MUXIE_DIR}/bin/"
+    rescue Exception => ex
+      error ex
+    end
+
+    #info _("copying apk file to #{@project_dir}/#{MUXIE_DIR}")
+    #`cp #{@project_dir}/#{MUXIE_DIR}/bin/#{app}-#{mode}.apk #{@project_dir}/#{MUXIE_DIR}`
+  end
+
   def info msg
     puts "[info] #{msg}"
   end
@@ -134,4 +226,7 @@ class MuxieMaker
     puts "[hint] #{msg}"
   end
 
+  def debug msg
+    puts "[debug] #{msg}"
+  end
 end

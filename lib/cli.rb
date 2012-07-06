@@ -20,8 +20,6 @@ class Cli < MuxieMaker
   def init package, project_name
 
     unless validate_package(package)
-      error _("package must match this pattern <name>.<organization>.<sufix>\n" +
-          "or similar, as long as the package contains 3 words separated by dot.")
       return
     end
 
@@ -42,8 +40,6 @@ class Cli < MuxieMaker
   def add_service
 
     unless project_dir?
-      error _("The %s does not contains the %s file.\n" +
-        "Try execute 'muxie-maker init'") % [@project_dir, MUXIE_JSON]
       return
     end
 
@@ -85,8 +81,6 @@ class Cli < MuxieMaker
   def color
 
     unless project_dir?
-      error _("The %s does not contains the %s file.\n" +
-        "Try execute 'muxie-maker init'") % [@project_dir, MUXIE_JSON]
       return
     end
 
@@ -120,70 +114,42 @@ class Cli < MuxieMaker
   end
 
   def test
-
-    unless project_dir?
-      error _("The %s does not contains the %s file.\n" +
-        "Try execute 'muxie-maker init'") % [@project_dir, MUXIE_JSON]
-      return
-    end
-
-    # TODO: verificar presença de java 6
-    # TODO: verificar presença do android sdk
-
-    unless File.directory? "#{@project_dir}/#{MUXIE_DIR}"
-      error _("Project diretory %s not found.\n" +
-        "You need to download the project from " +
-        "https://github.com/mad3linux/mad3-muxie/tags") % "#{@project_dir}/#{MUXIE_DIR}"
-      return
-    end
-
-    project = load_project
-    update_services(project.services)
-    update_package(project.package)
-    update_project_name(project.name)
-
-    # http://developer.android.com/tools/building/building-cmdline.html
-
-    # execute ant
-    info _("generating apk file...")
-    `cd #{@project_dir}/#{MUXIE_DIR} && ant debug -d -v`
-
-    app = @project_dir.split("/").last
-
-    # TODO: criar forma de não usar target dinamico.
-    info _("updating project settings...")
-    # update project
-    `#{@android} update project --target 1 --name #{app} --path #{@project_dir}/#{MUXIE_DIR}`
-
-    
-    info _("installing the apk in the emulator...")
-    # update project files
-    `#{@adb} install -r -l #{@project_dir}/#{MUXIE_DIR}/bin/#{app}-debug.apk`
-    
+    generate_apk
   end
 
-  def clean
+  def release
+    mode = "release-unsigned"
+    mode = "release" if File.exists? "#{@project_dir}/#{MUXIE_DIR}/ant.properties"
+    generate_apk(mode)
+  end
 
-    # TODO: criar metodo de validação de arquivos do projeto.
-    unless project_dir?
-      error _("The %s does not contains the %s file.\n" +
-        "Try execute 'muxie-maker init'") % [@project_dir, MUXIE_JSON]
-      return
-    end
+  def clean all=false
 
-    unless File.directory? "#{@project_dir}/#{MUXIE_DIR}"
-      error _("Project diretory %s not found.\n" +
-        "You need to download the project from " +
-        "https://github.com/mad3linux/mad3-muxie/tags") % "#{@project_dir}/#{MUXIE_DIR}"
+    unless project_dir? or has_muxie_dir?
       return
     end
 
     project = load_project
+    adb_uninstall(project.package) if all
+    
+    ant_clean
+  end
 
-    info _("uninstalling the app...")
-    `#{@adb} uninstall #{project.package}`
-    info _("cleaning %s...") % "#{@project_dir}/#{MUXIE_DIR}"
-    `cd #{@project_dir}/#{MUXIE_DIR} && ant clean`
+  def export
+    # TODO: support for apk versions
+    export_apk
+  end
+
+  def genkey
+    # generate a new keystore
+    hint _("follow the instructions to create a new keystore.")
+    project = load_project
+    `keytool -genkey -v -keystore #{@project_dir}/#{MUXIE_KEYSTORE} -alias #{project.package} -keyalg RSA -keysize 2048 -validity 10000`
+
+    File.open("#{@project_dir}/#{MUXIE_DIR}/ant.properties", "w") do |f|
+      f.puts "key.store=#{@project_dir}/#{MUXIE_KEYSTORE}"
+      f.puts "key.alias=#{project.package}"
+    end
   end
 
   def help
@@ -200,11 +166,13 @@ COMMANDS
 
   color - change the color of the icon (default:GREEN).
 
-  test - run your app in the emulator.
+  test - create the apk in debug mode and run your app in the emulator.
 
-  export [debug|release] - create the apk file.
+  release - create the apk in release mode and run your app in the emulator.
 
-  clean - clean the binary files.
+  export - copy the apk files to the project directory.
+
+  clean - clean the binary files under mad3-muxie/bin/ directory.
 
   help - show this help.
 
@@ -247,7 +215,38 @@ COMMANDS
   end
 
   def validate_package package
-    return package =~ /[a-z]{1}[a-z0-9]+\.[a-z]{1}[a-z0-9]+\.[a-z]{1}[a-z0-9]+/
+    unless package =~ /[a-z]{1}[a-z0-9]+\.[a-z]{1}[a-z0-9]+\.[a-z]{1}[a-z0-9]+/
+      error _("package must match this pattern <name>.<organization>.<sufix>\n" +
+          "or similar, as long as the package contains 3 words separated by dot.")
+      return false
+    end
+    return true
+  end
+
+  def generate_apk mode="debug"
+
+    unless project_dir? or has_muxie_dir?
+      return
+    end
+
+    project = load_project
+    update_services(project.services)
+    update_package(project.package)
+    update_project_name(project.name)
+
+    # http://developer.android.com/tools/building/building-cmdline.html
+
+    app = @project_dir.split("/").last
+    android_update_project(app)
+
+    case mode
+    when "debug"
+      ant_debug
+    when "release-unsigned", "release"
+      ant_release
+    end
+
+    adb_install(app, mode)
   end
 
 end

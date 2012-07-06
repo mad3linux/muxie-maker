@@ -1,0 +1,164 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: muxie-maker 1.0\n"
+"POT-Creation-Date: 2012-07-05 21:00-0300\n"
+"PO-Revision-Date: 2012-07-05 21:00-0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: lib/muxie_maker.rb:57
+msgid "The %s does not contains the %s file.\nTry to execute 'muxie-maker init'"
+msgstr ""
+
+#: lib/muxie_maker.rb:66
+msgid "Project diretory %s not found.\nYou need to download the project from https://github.com/mad3linux/mad3-muxie/tags"
+msgstr ""
+
+#: lib/muxie_maker.rb:101
+msgid "updating %d files..."
+msgstr ""
+
+#: lib/muxie_maker.rb:145
+msgid "installing the apk in the emulator..."
+msgstr ""
+
+#: lib/muxie_maker.rb:156
+msgid "please start an AVD or create one if you don't have yet."
+msgstr ""
+
+#: lib/muxie_maker.rb:162
+msgid "uninstalling the app..."
+msgstr ""
+
+#: lib/muxie_maker.rb:167
+msgid "updating project settings..."
+msgstr ""
+
+#: lib/muxie_maker.rb:174 lib/muxie_maker.rb:180
+msgid "generating apk file..."
+msgstr ""
+
+#: lib/muxie_maker.rb:184
+msgid "enter keystore password and enter password for alias:"
+msgstr ""
+
+#: lib/muxie_maker.rb:191
+msgid "cleaning %s..."
+msgstr ""
+
+#: lib/muxie_maker.rb:207
+msgid "directory %s not found. Try 'muxie-maker test' or 'muxie-maker release' first."
+msgstr ""
+
+#: lib/main.rb:19
+msgid "initializing gui..."
+msgstr ""
+
+#: lib/cli.rb:28
+msgid "writing %s file..."
+msgstr ""
+
+#: lib/cli.rb:35
+msgid "directory is not empty. Please remove all files first."
+msgstr ""
+
+#: lib/cli.rb:48
+msgid "Choose a service:"
+msgstr ""
+
+#. try to keep the items aligned try to keep the items aligned
+#: lib/cli.rb:53 lib/cli.rb:106 lib/cli.rb:112
+msgid "option not found. exiting."
+msgstr ""
+
+#: lib/cli.rb:57
+msgid "What's you uid?"
+msgstr ""
+
+#: lib/cli.rb:60
+msgid "uid not valid. exiting."
+msgstr ""
+
+#: lib/cli.rb:66
+msgid "Describe the service. Ex.: @mad3linux or Linux Blog."
+msgstr ""
+
+#: lib/cli.rb:69
+msgid "description not valid. exiting."
+msgstr ""
+
+#: lib/cli.rb:78
+msgid "service added."
+msgstr ""
+
+#: lib/cli.rb:87
+msgid "Choose from the options:"
+msgstr ""
+
+#. try to keep the items aligned
+#: lib/cli.rb:89
+msgid "[1] green   [2] blue   [3] orange\n[4] red     [5] purple"
+msgstr ""
+
+#. try to keep the items aligned
+#: lib/cli.rb:110
+msgid "icon color changed."
+msgstr ""
+
+#: lib/cli.rb:145
+msgid "follow the instructions to create a new keystore."
+msgstr ""
+
+#. make sure to do not translate the commands, only the description.
+#: lib/cli.rb:157
+msgid "\nSYNOPSIS\n  muxie-maker command [options]\n\nCOMMANDS\n  init package [name] - initialize a new project.\n    the 'package' must be something like name.organization.app or org.website.app\n\n  service - add a new service to the project.\n\n  color - change the color of the icon (default:GREEN).\n\n  test - create the apk in debug mode and run your app in the emulator.\n\n  release - create the apk in release mode and run your app in the emulator.\n\n  export - copy the apk files to the project directory.\n\n  clean - clean the binary files under mad3-muxie/bin/ directory.\n\n  help - show this help.\n\n"
+msgstr ""
+
+#. make sure to do not translate the commands, only the description.
+#: lib/cli.rb:187
+msgid "Your uid is your url. Ex.: www.mad3linux.org"
+msgstr ""
+
+#. make sure to do not translate the commands, only the description.
+#: lib/cli.rb:190
+msgid "Your uid is your username. Ex.: mad3linux"
+msgstr ""
+
+#. make sure to do not translate the commands, only the description.
+#: lib/cli.rb:193
+msgid "Your uid is hidden under your page name. Let me search for you"
+msgstr ""
+
+#. make sure to do not translate the commands, only the description.
+#: lib/cli.rb:197
+msgid "searching for your uid..."
+msgstr ""
+
+#. make sure to do not translate the commands, only the description.
+#: lib/cli.rb:200
+msgid "I see that you already know your uid. Well done!"
+msgstr ""
+
+#. make sure to do not translate the commands, only the description.
+#: lib/cli.rb:202
+msgid "Your uid is %d."
+msgstr ""
+
+#. make sure to do not translate the commands, only the description.
+#: lib/cli.rb:205
+msgid "Your uid is the complete url for your RSS service. Ex.: http://www.mad3linux.org/feed"
+msgstr ""
+
+#: lib/cli.rb:219
+msgid "package must match this pattern <name>.<organization>.<sufix>\nor similar, as long as the package contains 3 words separated by dot."
+msgstr ""

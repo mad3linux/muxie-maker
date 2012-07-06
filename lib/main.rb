@@ -32,9 +32,15 @@ if __FILE__ == $0
     when "test"
       cli.test
     when "export"
-      puts "on development"
+      cli.export
+    when "genkey"
+      cli.genkey
     when "clean"
       cli.clean
+    when "clean-all"
+      cli.clean true
+    when "release"
+      cli.release
     when "help"
       cli.help
     else
