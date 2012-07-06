@@ -146,7 +146,6 @@ class MuxieMaker
 
   def update_project_name name
     doc = Document.new(File.new @strings)
-    #puts doc.root.elements["string[@name='app_name']"].text
     if doc.root.elements["string[@name='app_name']"].text != name
       doc.root.elements["string[@name='app_name']"].text = name
       # make a backup of the strings.xml in case of C^c

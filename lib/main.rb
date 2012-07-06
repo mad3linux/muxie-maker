@@ -52,6 +52,5 @@ if __FILE__ == $0
   rescue Exception => ex
     # cli.error ex
   end
-  
 
 end

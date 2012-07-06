@@ -125,7 +125,7 @@ class Cli < MuxieMaker
 
   def clean all=false
 
-    unless project_dir? or has_muxie_dir? or validate_installed_tools?
+    unless project_dir? and has_muxie_dir? and validate_installed_tools?
       return
     end
 
@@ -232,7 +232,7 @@ COMMANDS
 
   def generate_apk mode="debug"
 
-    unless project_dir? or has_muxie_dir? or validate_installed_tools?
+    unless project_dir? and has_muxie_dir? and validate_installed_tools?
       return
     end
 
