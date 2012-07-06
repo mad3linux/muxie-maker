@@ -6,110 +6,159 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: muxie-maker 1.0\n"
-"POT-Creation-Date: 2012-07-05 21:00-0300\n"
-"PO-Revision-Date: 2012-07-05 21:04-0300\n"
+"POT-Creation-Date: 2012-07-06 18:08-0300\n"
+"PO-Revision-Date: 2012-07-06 18:13-0300\n"
 "Last-Translator: Átila Camurça <camurca.home@gmail.com>\n"
 "Language-Team: Português <comsolid3@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: lib/muxie_maker.rb:57
+#: lib/muxie_maker.rb:69
 msgid ""
 "The %s does not contains the %s file.\n"
 "Try to execute 'muxie-maker init'"
 msgstr ""
+"O %s não contém o arquivo %s.\n"
+"Tente executar 'muxie-maker init'"
 
-#: lib/muxie_maker.rb:66
+#: lib/muxie_maker.rb:78
 msgid ""
 "Project diretory %s not found.\n"
 "You need to download the project from https://github.com/mad3linux/mad3-"
-"muxie/tags"
+"muxie/tags\n"
+"\n"
 msgstr ""
+"Diretório de projeto %s não encontrado.\n"
+"Você precisa baixar o projeto de https://github.com/mad3linux/mad3-muxie/"
+"tags\n"
+"\n"
 
-#: lib/muxie_maker.rb:101
+#: lib/muxie_maker.rb:89
+msgid ""
+"android not found. You need to install Android SDK\n"
+"and put 'android' on the path. You can download Android SDK from:\n"
+"\thttp://developer.android.com/sdk/index.html\n"
+msgstr ""
+"android não encontrado. Você precisa instalar o Android SDK\n"
+"e colocar o 'android' em seu path. Você pode baixar o Android SDK de:\n"
+"\thttp://developer.android.com/sdk/index.html\n"
+
+#: lib/muxie_maker.rb:96
+msgid ""
+"adb not found. adb is part of the Android SDK\n"
+"and can be found at $ANDROID_SDK/platform-tools/\n"
+msgstr ""
+"adb não encontrado. adb é parte do Android SDK\n"
+"e pode ser encontrado em $ANDROID_SDK/platform-tools/\n"
+
+#: lib/muxie_maker.rb:103 lib/cli.rb:146
+msgid ""
+"keytool not found. keytool is part of the Java Platform\n"
+"You will need keytool just to sign your application.\n"
+msgstr ""
+"keytool não encontrado. keytool é parte da Plataforma Java\n"
+"Você irá precisar de keytool apenas para assinar sua aplicação.\n"
+
+#: lib/muxie_maker.rb:137
 msgid "updating %d files..."
-msgstr ""
+msgstr "atualizando %d arquivos..."
 
-#: lib/muxie_maker.rb:145
+#: lib/muxie_maker.rb:181
 msgid "installing the apk in the emulator..."
-msgstr ""
+msgstr "instalando o apk no emulador..."
 
-#: lib/muxie_maker.rb:156
+#: lib/muxie_maker.rb:192
 msgid "please start an AVD or create one if you don't have yet."
-msgstr ""
+msgstr "por favor, inicie um AVD ou crie um, se você não tem ainda."
 
-#: lib/muxie_maker.rb:162
+#: lib/muxie_maker.rb:198
 msgid "uninstalling the app..."
-msgstr ""
+msgstr "desinstalando o app..."
 
-#: lib/muxie_maker.rb:167
+#: lib/muxie_maker.rb:203
 msgid "updating project settings..."
-msgstr ""
+msgstr "atualizando as configurações do projeto..."
 
-#: lib/muxie_maker.rb:174 lib/muxie_maker.rb:180
+#: lib/muxie_maker.rb:210 lib/muxie_maker.rb:216
 msgid "generating apk file..."
-msgstr ""
+msgstr "gerando arquivo apk..."
 
-#: lib/muxie_maker.rb:184
+#: lib/muxie_maker.rb:220
 msgid "enter keystore password and enter password for alias:"
-msgstr ""
+msgstr "entre com a senha do keystore e entre com a senha para o alias:"
 
-#: lib/muxie_maker.rb:191
+#: lib/muxie_maker.rb:227
 msgid "cleaning %s..."
-msgstr ""
+msgstr "limpando %s..."
 
-#: lib/muxie_maker.rb:207
+#: lib/muxie_maker.rb:243
 msgid ""
 "directory %s not found. Try 'muxie-maker test' or 'muxie-maker release' "
 "first."
 msgstr ""
+"diretório %s não encontrado. Tente 'muxie-maker test' ou 'muxie-maker "
+"release' primeiro."
 
-#: lib/main.rb:19
-msgid "initializing gui..."
+#: lib/main.rb:29
+msgid "this option is still in development."
+msgstr "esta opção ainda está em desenvolvimento."
+
+#: lib/main.rb:46
+msgid "option not found. Try one of the options below."
+msgstr "opção não encontrada. Tente uma das opções abaixo."
+
+#: lib/main.rb:50
+msgid ""
+"\n"
+"Ctrl-c captured. Exiting now."
 msgstr ""
+"\n"
+"Ctrl-c capturado. Saindo agora."
 
 #: lib/cli.rb:28
 msgid "writing %s file..."
-msgstr ""
+msgstr "escrevendo arquivo %s..."
 
 #: lib/cli.rb:35
 msgid "directory is not empty. Please remove all files first."
 msgstr ""
+"diretório não está vazio. Por favor, remova todos os arquivos primeiro."
 
 #: lib/cli.rb:48
 msgid "Choose a service:"
-msgstr ""
+msgstr "Escolha um serviço:"
 
 #. try to keep the items aligned try to keep the items aligned
 #: lib/cli.rb:53 lib/cli.rb:106 lib/cli.rb:112
 msgid "option not found. exiting."
-msgstr ""
+msgstr "opção não encontrada. saindo."
 
 #: lib/cli.rb:57
 msgid "What's you uid?"
-msgstr ""
+msgstr "Qual é o seu uid?"
 
 #: lib/cli.rb:60
 msgid "uid not valid. exiting."
-msgstr ""
+msgstr "uid não é válido. saindo."
 
 #: lib/cli.rb:66
 msgid "Describe the service. Ex.: @mad3linux or Linux Blog."
-msgstr ""
+msgstr "Descreva o serviço. Ex.: @mad3linux ou Linux Blog."
 
 #: lib/cli.rb:69
 msgid "description not valid. exiting."
-msgstr ""
+msgstr "descrição não é válida. saindo."
 
 #: lib/cli.rb:78
 msgid "service added."
-msgstr ""
+msgstr "serviço adicionado."
 
 #: lib/cli.rb:87
 msgid "Choose from the options:"
-msgstr ""
+msgstr "Escolha uma das opções:"
 
 #. try to keep the items aligned
 #: lib/cli.rb:89
@@ -117,18 +166,20 @@ msgid ""
 "[1] green   [2] blue   [3] orange\n"
 "[4] red     [5] purple"
 msgstr ""
+"[1] verde      [2] azul   [3] laranja\n"
+"[4] vermelho   [5] roxo"
 
 #. try to keep the items aligned
 #: lib/cli.rb:110
 msgid "icon color changed."
-msgstr ""
+msgstr "cor do ícone alterada."
 
-#: lib/cli.rb:145
+#: lib/cli.rb:152
 msgid "follow the instructions to create a new keystore."
-msgstr ""
+msgstr "siga as instruções para criar uma nova chave de armazenamento."
 
 #. make sure to do not translate the commands, only the description.
-#: lib/cli.rb:157
+#: lib/cli.rb:164
 msgid ""
 "\n"
 "SYNOPSIS\n"
@@ -155,46 +206,76 @@ msgid ""
 "  help - show this help.\n"
 "\n"
 msgstr ""
+"\n"
+"SUMÁRIO\n"
+"  muxie-maker comando [opções]\n"
+"\n"
+"COMANDOS\n"
+"  init pacote [nome] - inicializar um novo projeto.\n"
+"    o 'pacote' deve ser algo como nome.organizacao.app ou org.website.app\n"
+"\n"
+"  service - adicionar um novo serviço ao projeto.\n"
+"\n"
+"  color - mudar a cor do ícone (padrão:VERDE).\n"
+"\n"
+"  test - criar o apk em modo debug e executar o aplicativo no emulador.\n"
+"\n"
+"  release - criar o apk no modo de versão e executar o aplicativo no "
+"emulador.\n"
+"\n"
+"  export - copiar os arquivos apk para o diretório do projeto.\n"
+"\n"
+"  clean - limpar os arquivos binários sob diretório mad3-muxie/bin/.\n"
+"\n"
+"  help - mostra esta ajuda.\n"
+"\n"
 
 #. make sure to do not translate the commands, only the description.
-#: lib/cli.rb:187
+#: lib/cli.rb:194
 msgid "Your uid is your url. Ex.: www.mad3linux.org"
-msgstr ""
-
-#. make sure to do not translate the commands, only the description.
-#: lib/cli.rb:190
-msgid "Your uid is your username. Ex.: mad3linux"
-msgstr ""
-
-#. make sure to do not translate the commands, only the description.
-#: lib/cli.rb:193
-msgid "Your uid is hidden under your page name. Let me search for you"
-msgstr ""
+msgstr "Seu uid é a sua url. Ex.: www.mad3linux.org"
 
 #. make sure to do not translate the commands, only the description.
 #: lib/cli.rb:197
-msgid "searching for your uid..."
-msgstr ""
+msgid "Your uid is your username. Ex.: mad3linux"
+msgstr "Seu uid é o seu nome de usuário. Ex.: Mad3linux"
 
 #. make sure to do not translate the commands, only the description.
 #: lib/cli.rb:200
-msgid "I see that you already know your uid. Well done!"
-msgstr ""
+msgid "Your uid is hidden under your page name. Let me search for you"
+msgstr "Seu uid está escondido sob o nome da sua página. Deixe que eu procuro"
 
 #. make sure to do not translate the commands, only the description.
-#: lib/cli.rb:202
+#: lib/cli.rb:204
+msgid "searching for your uid..."
+msgstr "buscando seu uid..."
+
+#. make sure to do not translate the commands, only the description.
+#: lib/cli.rb:207
+msgid "I see that you already know your uid. Well done!"
+msgstr "Vejo que você já sabe o seu uid. Bom trabalho!"
+
+#. make sure to do not translate the commands, only the description.
+#: lib/cli.rb:209
 msgid "Your uid is %d."
 msgstr "Seu uid é %d."
 
 #. make sure to do not translate the commands, only the description.
-#: lib/cli.rb:205
+#: lib/cli.rb:212
 msgid ""
 "Your uid is the complete url for your RSS service. Ex.: http://www.mad3linux."
 "org/feed"
 msgstr ""
+"O uid é a url completa para o seu serviço de RSS. Ex.: http://www.mad3linux."
+"org/feed"
 
-#: lib/cli.rb:219
+#: lib/cli.rb:226
 msgid ""
 "package must match this pattern <name>.<organization>.<sufix>\n"
 "or similar, as long as the package contains 3 words separated by dot."
 msgstr ""
+"o pacote deve corresponder a este padrão <nome>.<organizacao>.<sufixo>\n"
+"ou similar, desde que o pacote contenha 3 palavras separadas por ponto."
+
+#~ msgid "initializing gui..."
+#~ msgstr "inicializando gui..."

@@ -22,6 +22,18 @@ class MuxieMaker
     @sql = "#{@project_dir}/#{MUXIE_DIR}/res/values/sql.xml"
   end
 
+  def info msg
+    puts "[info] #{msg}"
+  end
+
+  def error msg
+    puts "[error] #{msg}"
+  end
+
+  def hint msg
+    puts "[hint] #{msg}"
+  end
+
   private
 
   def find_facebook_uid pagename
@@ -65,9 +77,33 @@ class MuxieMaker
     unless File.directory? "#{@project_dir}/#{MUXIE_DIR}"
       error _("Project diretory %s not found.\n" +
           "You need to download the project from " +
-          "https://github.com/mad3linux/mad3-muxie/tags") % "#{@project_dir}/#{MUXIE_DIR}"
+          "https://github.com/mad3linux/mad3-muxie/tags\n\n" +
+          "extract the directory and rename to #{MUXIE_DIR}") % "#{@project_dir}/#{MUXIE_DIR}"
       return false
     end
+    return true
+  end
+
+  def validate_installed_tools?
+    if @android.empty?
+      error _("android not found. You need to install Android SDK\n" +
+        "and put 'android' on the path. You can download Android SDK from:\n\t" +
+      "http://developer.android.com/sdk/index.html\n")
+      return false
+    end
+
+    if @adb.empty?
+      error _("adb not found. adb is part of the Android SDK\n" +
+        "and can be found at $ANDROID_SDK/platform-tools/\n")
+      return false
+    end
+
+    # optional
+    if @keytool.empty?
+      error _("keytool not found. keytool is part of the Java Platform\n" +
+        "You will need keytool just to sign your application.\n")
+    end
+
     return true
   end
 
@@ -212,18 +248,6 @@ class MuxieMaker
 
     #info _("copying apk file to #{@project_dir}/#{MUXIE_DIR}")
     #`cp #{@project_dir}/#{MUXIE_DIR}/bin/#{app}-#{mode}.apk #{@project_dir}/#{MUXIE_DIR}`
-  end
-
-  def info msg
-    puts "[info] #{msg}"
-  end
-
-  def error msg
-    puts "[error] #{msg}"
-  end
-
-  def hint msg
-    puts "[hint] #{msg}"
   end
 
   def debug msg

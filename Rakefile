@@ -49,3 +49,10 @@ task :updatepo do
   require 'gettext/tools'
   GetText.update_pofiles("muxie-maker", Dir.glob("{lib}/**/*.{rb}"), "muxie-maker 1.0")
 end
+
+desc "Create mo-files"
+task :makemo do
+  require 'gettext/tools'
+  # require 'gettext_rails/tools'  # For Ruby on Rails.
+  GetText.create_mofiles
+end

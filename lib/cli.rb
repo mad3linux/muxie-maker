@@ -125,7 +125,7 @@ class Cli < MuxieMaker
 
   def clean all=false
 
-    unless project_dir? or has_muxie_dir?
+    unless project_dir? or has_muxie_dir? or validate_installed_tools?
       return
     end
 
@@ -141,10 +141,17 @@ class Cli < MuxieMaker
   end
 
   def genkey
+    # required
+    if @keytool.empty?
+      error _("keytool not found. keytool is part of the Java Platform\n" +
+        "You will need keytool just to sign your application.\n")
+      return
+    end
+
     # generate a new keystore
     hint _("follow the instructions to create a new keystore.")
     project = load_project
-    `keytool -genkey -v -keystore #{@project_dir}/#{MUXIE_KEYSTORE} -alias #{project.package} -keyalg RSA -keysize 2048 -validity 10000`
+    `#{@keytool} -genkey -v -keystore #{@project_dir}/#{MUXIE_KEYSTORE} -alias #{project.package} -keyalg RSA -keysize 2048 -validity 10000`
 
     File.open("#{@project_dir}/#{MUXIE_DIR}/ant.properties", "w") do |f|
       f.puts "key.store=#{@project_dir}/#{MUXIE_KEYSTORE}"
@@ -225,7 +232,7 @@ COMMANDS
 
   def generate_apk mode="debug"
 
-    unless project_dir? or has_muxie_dir?
+    unless project_dir? or has_muxie_dir? or validate_installed_tools?
       return
     end
 
