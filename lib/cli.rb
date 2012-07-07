@@ -193,7 +193,7 @@ COMMANDS
     when Service::Type::Blogger, Service::Type::Wordpress
       hint _("Your uid is your url. Ex.: www.mad3linux.org")
       return STDIN.gets.chop
-    when Service::Type::Twitter, Service::Type::Identica
+    when Service::Type::Twitter
       hint _("Your uid is your username. Ex.: mad3linux")
       return STDIN.gets.chop
     when Service::Type::Facebook
@@ -208,6 +208,10 @@ COMMANDS
       end
       info _("Your uid is %d.") % uid
       return uid
+    when Service::Type::Identica
+      # TRANSLATORS: look at the identica profile page to see how they translate 'User ID'.
+      hint _("Your uid is in your identica profile page. Look for 'User ID'")
+      return STDIN.gets.chop
     when Service::Type::Custom
       hint _("Your uid is the complete url for your RSS service. " +
         "Ex.: http://www.mad3linux.org/feed")

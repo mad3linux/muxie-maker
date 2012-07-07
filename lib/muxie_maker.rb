@@ -98,6 +98,12 @@ class MuxieMaker
       return false
     end
 
+    if `which javac`.chop.empty?
+      error _("javac not found. javac is part of the Java JDK Platform\n" +
+        "You need to install Java JDK 6.\n")
+      return false
+    end
+
     # optional
     if @keytool.empty?
       error _("keytool not found. keytool is part of the Java Platform\n" +
@@ -159,7 +165,10 @@ class MuxieMaker
 
   def update_services services
     doc = Document.new(File.new @sql)
-    doc.root.elements["string-array[@name='sql_insert_rss']"].delete_element 1
+    # delete all item nodes
+    begin
+      aux = doc.root.elements["string-array[@name='sql_insert_rss']"].delete_element 1
+    end until aux == nil
 
     services.each do |service|
       element = Element.new "item"
@@ -177,20 +186,30 @@ class MuxieMaker
   end
 
   def adb_install app, mode="debug"
+    # check for avaliable devices
+    result = `#{@adb} devices`
+    puts result.split("\n")
+    if result.split("\n").size == 1
+      hint _("please start an AVD or create one if you don't have yet.")
+      `#{@android} avd &`
+      return
+    end
+
     info _("installing the apk in the emulator...")
     # update project files
-    cmd = "#{@adb} install -r -l #{@project_dir}/#{MUXIE_DIR}/bin/#{app}-#{mode}.apk"
+    `#{@adb} install -r #{@project_dir}/#{MUXIE_DIR}/bin/#{app}-#{mode}.apk`
 
-    out = ""
+    # depreacated since adb version 1.0.29
     # capture the stderr from the terminal
-    Open3.popen3(cmd) do |stdrin, stdout, stderr|
-      out = stderr.read
-    end
+    # Open3.popen3(cmd) do |stdrin, stdout, stderr|
+    #   out = stderr.read
+    #   puts stdout.read
+    # end
 
-    if out.chop == "error: device not found"
-      hint _("please start an AVD or create one if you don't have yet.")
-      `#{@android} avd`
-    end
+    # if cmd.split("\n")[0] == "error: device not found"
+    #   hint _("please start an AVD or create one if you don't have yet.")
+    #   `#{@android} avd &`
+    # end
   end
 
   def adb_uninstall package
@@ -206,13 +225,13 @@ class MuxieMaker
 
   def ant_debug
     # execute ant
-    info _("generating apk file...")
+    info _("generating apk file [debug]...")
     `cd #{@project_dir}/#{MUXIE_DIR} && ant debug -d -v`
   end
 
   def ant_release
     # execute ant
-    info _("generating apk file...")
+    info _("generating apk file [release]...")
 
     if File.exists? "#{@project_dir}/#{MUXIE_DIR}/ant.properties"
       # TODO: tentar mostrar as mensagens do ant que pedem esses dados.
