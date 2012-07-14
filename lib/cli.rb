@@ -244,7 +244,8 @@ COMMANDS
     update_services(project.services)
     update_package(project.package)
     update_project_name(project.name)
-
+    change_color(project.icon_color)
+    
     # http://developer.android.com/tools/building/building-cmdline.html
 
     app = @project_dir.split("/").last

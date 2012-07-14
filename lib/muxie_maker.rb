@@ -17,6 +17,7 @@ class MuxieMaker
     @android = `which android`.chop
     @adb = `which adb`.chop
     @keytool = `which keytool`.chop
+    @inkscape = `which inkscape`.chop
     @manifest = "#{@project_dir}/#{MUXIE_DIR}/AndroidManifest.xml"
     @strings = "#{@project_dir}/#{MUXIE_DIR}/res/values/strings.xml"
     @sql = "#{@project_dir}/#{MUXIE_DIR}/res/values/sql.xml"
@@ -100,7 +101,7 @@ class MuxieMaker
 
     if `which javac`.chop.empty?
       error _("javac not found. javac is part of the Java JDK Platform\n" +
-        "You need to install Java JDK 6.\n")
+        "You need to install Java JDK 6 or higher.\n")
       return false
     end
 
@@ -108,6 +109,11 @@ class MuxieMaker
     if @keytool.empty?
       error _("keytool not found. keytool is part of the Java Platform\n" +
         "You will need keytool just to sign your application.\n")
+    end
+
+    # optional
+    if @inkscape.empty?
+      error _("inkscape not found. You need inkscape to automatically convert your app launcher.\n")
     end
 
     return true
@@ -135,7 +141,6 @@ class MuxieMaker
     file_array = [
       "fidias/model/Helper.java",
       "fidias/view/SimpleActivity.java",
-      "mad3/muxie/app/MadActivity.java",
       "mad3/muxie/view/FavoritesActivity.java",
       "mad3/muxie/view/PostListActivity.java",
       "mad3/muxie/view/WebViewActivity.java"
@@ -247,8 +252,6 @@ class MuxieMaker
   end
 
   def export_apk
-    # FIXME: ...
-    # verificar arquivos apk em bin/
     begin
       info _("copying apk files to #{@project_dir}/#{MUXIE_DIR}")
       entries = Dir.entries "#{@project_dir}/#{MUXIE_DIR}/bin/"
@@ -263,12 +266,61 @@ class MuxieMaker
     rescue Exception => ex
       error ex
     end
-
-    #info _("copying apk file to #{@project_dir}/#{MUXIE_DIR}")
-    #`cp #{@project_dir}/#{MUXIE_DIR}/bin/#{app}-#{mode}.apk #{@project_dir}/#{MUXIE_DIR}`
   end
 
   def debug msg
     puts "[debug] #{msg}"
   end
+
+  def change_color color
+    template_bkp = File.dirname(__FILE__) + "/../svg/template.svg"
+    template = "#{@project_dir}/#{MUXIE_DIR}/svg/template.svg"
+
+    if File.exists? template
+      doc = Document.new(File.new template)
+      doc.root.elements.each("*/rect") do |e|
+        if e.attributes["id"] == "rect3245" and
+            e.attributes["style"] != "fill:#{color};fill-opacity:1"
+          
+          e.attributes["style"] = "fill:#{color};fill-opacity:1"
+          File.open(template, "w") do |f|
+            debug "writing to #{@project_dir}/#{MUXIE_DIR}/svg/template.svg"
+            f.puts doc.to_s
+          end
+
+        end
+      end # each
+      
+      launcher = "#{@project_dir}/#{MUXIE_DIR}/svg/ic_launcher.svg"
+      unless File.exists? launcher
+        hint _("Create a ic_launcher.svg file to use in your app and let " +
+          "the template.svg as a backup file. This files can be found at %s\n\n" +
+          "After created, muxie-maker automatically will generate the needed files.") %
+            "#{@project_dir}/#{MUXIE_DIR}/svg/"
+      else
+        info _("ic_launcher.svg found. Generating files...")
+        # TODO: call inkscape and generate files.
+        # required
+        if @inkscape.empty?
+          error _("inkscape not found. You need inkscape to automatically convert" +
+              "your app launcher.\n")
+        else
+          # inkscape -w 96 -h 96 -e template.png template.svg
+          [
+            {:dir => "drawable-ldpi", :size => 36},
+            {:dir => "drawable-mdpi", :size => 48},
+            {:dir => "drawable-hdpi", :size => 72},
+            {:dir => "drawable-xhdpi", :size => 96}
+          ].each do |icon|
+            `#{@inkscape} -w #{icon[:size]} -h #{icon[:size]} \
+            -e #{@project_dir}/#{MUXIE_DIR}/res/#{icon[:dir]}/ic_launcher.png #{launcher}`
+          end
+        end
+      end
+
+    else
+      FileUtils.cp template_bkp, template
+    end # File.exists?
+  end
+
 end
