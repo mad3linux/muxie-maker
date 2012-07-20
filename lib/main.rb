@@ -42,6 +42,10 @@ if __FILE__ == $0
       cli.release
     when "help"
       cli.help
+    when "avd"
+      cli.android_avd
+    when "server"
+      cli.server
     else
       cli.error _("option not found. Try one of the options below.")
       cli.help

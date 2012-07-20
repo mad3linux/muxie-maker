@@ -35,6 +35,21 @@ class MuxieMaker
     puts "[hint] #{msg}"
   end
 
+  def android_avd
+    `#{@android} avd &`
+  end
+
+  def load_project
+    contents = File.open("#{@project_dir}/#{MUXIE_JSON}").read
+    json = JSON.parse contents
+    project = Project.new(json["package"], json["name"])
+    project.icon_color = json["icon_color"]
+    json["services"].each do |service|
+      project.add_service(service)
+    end
+    return project
+  end
+
   private
 
   def find_facebook_uid pagename
@@ -52,17 +67,6 @@ class MuxieMaker
     File.open("#{@project_dir}/#{MUXIE_JSON}", "w") do |f|
       f.puts project.to_json
     end
-  end
-
-  def load_project
-    contents = File.open("#{@project_dir}/#{MUXIE_JSON}").read
-    json = JSON.parse contents
-    project = Project.new(json["package"], json["name"])
-    project.icon_color = json["icon_color"]
-    json["services"].each do |service|
-      project.add_service(service)
-    end
-    return project
   end
 
   def project_dir?
@@ -140,6 +144,7 @@ class MuxieMaker
   def update_package_in_files old_package, package
     file_array = [
       "fidias/model/Helper.java",
+      "mad3/muxie/app/MadActivity.java",
       "fidias/view/SimpleActivity.java",
       "mad3/muxie/view/FavoritesActivity.java",
       "mad3/muxie/view/PostListActivity.java",
@@ -191,12 +196,14 @@ class MuxieMaker
   end
 
   def adb_install app, mode="debug"
+    # ensure that there is a server running
+    `adb start-server`
     # check for avaliable devices
     result = `#{@adb} devices`
-    puts result.split("\n")
+    #puts result.split("\n")
     if result.split("\n").size == 1
       hint _("please start an AVD or create one if you don't have yet.")
-      `#{@android} avd &`
+      android_avd
       return
     end
 

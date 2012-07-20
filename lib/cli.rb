@@ -7,11 +7,16 @@ require "open-uri"
 require "uri"
 require "gettext"
 require "muxie_maker"
+require 'webrick'
+require 'erb'
+require "assets/muxie_servlet"
 
 class Cli < MuxieMaker
 
   include GetText
   bindtextdomain "muxie-maker"
+  
+  include WEBrick
 
   def initialize
     super()
@@ -184,6 +189,20 @@ COMMANDS
   help - show this help.
 
 """)
+  end
+
+  def server
+    unless project_dir?
+      return
+    end
+
+    s = HTTPServer.new( :Port => 9669, :DocumentRoot => File.dirname(__FILE__) + "/assets" )
+    s.mount("/muxie-maker", MuxieServlet)
+    trap("INT"){
+      s.shutdown
+    }
+    info _("access http://localhost:9669/muxie-maker")
+    s.start
   end
 
   private
