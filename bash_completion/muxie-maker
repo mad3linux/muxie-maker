@@ -4,7 +4,7 @@ _muxie-maker()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="init service color test export clean clean-all release genkey help"
+    opts="init service color test export clean clean-all release genkey help avd server"
 
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
     return 0
