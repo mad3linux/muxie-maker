@@ -14,8 +14,6 @@ bindtextdomain "muxie-maker"
 #################
 if __FILE__ == $0
 
-  # TODO: create a gui
-
   command = ARGV[0]
   # create a command line object
   cli = Cli.new
@@ -53,8 +51,7 @@ if __FILE__ == $0
   rescue SystemExit, Interrupt
     cli.error _("\nCtrl-c captured. Exiting now.")
     raise
-  rescue Exception => ex
-    # cli.error ex
+  rescue Exception
   end
 
 end

@@ -14,6 +14,8 @@ class MuxieMaker
 
   def initialize
     @project_dir = Dir.pwd
+    @installed_dir = File.dirname(__FILE__)
+    @assets = "#{@installed_dir}/assets"
     @android = `which android`.chop
     @adb = `which adb`.chop
     @keytool = `which keytool`.chop

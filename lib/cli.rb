@@ -196,12 +196,12 @@ COMMANDS
       return
     end
 
-    s = HTTPServer.new( :Port => 9669, :DocumentRoot => File.dirname(__FILE__) + "/assets" )
+    s = HTTPServer.new( :Port => 9669, :DocumentRoot => @assets )
     s.mount("/muxie-maker", MuxieServlet)
     trap("INT"){
       s.shutdown
     }
-    info _("access http://localhost:9669/muxie-maker")
+    info _("access http://localhost:9669/muxie-maker\n\n")
     s.start
   end
 
